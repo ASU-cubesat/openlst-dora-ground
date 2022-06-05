@@ -45,6 +45,15 @@ typedef struct {
 
 extern __xdata telemetry_t telemetry;
 
+typedef struct {
+	uint8_t data[128];
+} externalData_t;
+
+#define NUM_EXTERNAL_DATA 1
+
+extern __xdata externalData_t externalData[NUM_EXTERNAL_DATA];
+
+void update_external_data(uint8_t idx, __xdata void * incoming);
 void telemetry_init(void);
 void update_telemetry(void);
 

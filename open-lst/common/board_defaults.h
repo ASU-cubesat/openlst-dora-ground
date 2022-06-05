@@ -125,7 +125,6 @@
 #define AUTO_REBOOT_SECONDS 600
 #endif
 
-
 // Cap the number of seconds the reboot counter
 // can be extended. Override to 0 to disable this cap.
 // The default is 1 week.
@@ -154,7 +153,6 @@
 #define FORWARD_MESSAGES_UART0 1
 #endif
 #endif
-
 
 // Forward messages from the RF to the UART
 // by default in the application but not

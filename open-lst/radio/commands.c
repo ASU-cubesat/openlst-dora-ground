@@ -25,7 +25,36 @@
 #include "watchdog.h"
 
 #ifdef CUSTOM_COMMANDS
-uint8_t custom_commands(const __xdata command_t *cmd, uint8_t len, __xdata command_t *reply);
+uint8_t custom_commands(const __xdata command_t *cmd, uint8_t len, __xdata command_t *reply) {
+	__xdata msg_data_t *cmd_data;
+	__xdata msg_data_t *reply_data;
+	uint8_t additional_length;
+	cmd_data = (__xdata msg_data_t *) cmd->data;
+	reply_data = (__xdata msg_data_t *) reply->data;
+
+	len; // Shut compiler warnings 
+
+	additional_length = 0;
+
+	switch (cmd->header.command) {
+		case radio_msg_set_ext_data_1:
+			reply->header.command = common_msg_ack;
+			update_external_data(0, &cmd_data->externalData);
+			break;
+		case radio_msg_get_ext_data_1:
+			reply->header.command = radio_msg_set_ext_data_1;
+			memcpyx(
+				(__xdata void *) &reply_data->externalData,
+				(__xdata void *) &externalData[0],
+				sizeof(reply_data->externalData));
+			additional_length += sizeof(reply_data->externalData);
+			break;
+		default:
+			break;
+	}
+
+	return additional_length;
+}
 #endif
 
 uint8_t commands_handle_command(const __xdata command_t *cmd, uint8_t len, __xdata command_t *reply) {
@@ -145,7 +174,7 @@ uint8_t commands_handle_command(const __xdata command_t *cmd, uint8_t len, __xda
 
 		#ifdef CUSTOM_COMMANDS
 		default:
-			reply_length = custom_commands(cmd, len, reply);
+			reply_length += custom_commands(cmd, len, reply);
 		#endif
 	}
 	return reply_length;

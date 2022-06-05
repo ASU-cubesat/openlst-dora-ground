@@ -25,6 +25,7 @@
 #include "uart1.h"
 
 __xdata telemetry_t telemetry;
+__xdata externalData_t externalData[NUM_EXTERNAL_DATA];
 
 void telemetry_init(void) {
 	memsetx((__xdata void*) &telemetry, 0, sizeof(telemetry));
@@ -70,4 +71,15 @@ void update_telemetry(void) {
 	telemetry.packets_rejected_reserved = radio_packets_rejected_reserved;
 	telemetry.packets_rejected_other = radio_packets_rejected_other;
 
+}
+
+void update_external_data(uint8_t idx, __xdata void * incoming) {
+	if (idx >= NUM_EXTERNAL_DATA) {
+		return;
+	}
+
+	memcpyx(
+			(__xdata void *) &externalData[idx],
+			(__xdata void *) incoming,
+			sizeof(externalData_t));
 }
