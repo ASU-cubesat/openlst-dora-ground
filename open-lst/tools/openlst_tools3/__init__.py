@@ -1,4 +1,3 @@
-#!/bin/bash -ex
 # OpenLST
 # Copyright (C) 2018 Planet Labs Inc.
 #
@@ -14,18 +13,3 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-sudo apt-get update
-sudo apt-get install --assume-yes python-dev
-wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
-python get-pip.py
-. ~/.bashrc
-pip install -e /home/vagrant/project/open-lst/tools
-
-# Install the radio services
-sudo cp /home/vagrant/project/open-lst/tools/radio@.service /etc/systemd/system/radio@.service
-sudo systemctl daemon-reload
-sudo systemctl enable radio@0 radio@1
-
-# Allow user to access dialout group, needed to access uart/tty ports
-sudo adduser vagrant dialout

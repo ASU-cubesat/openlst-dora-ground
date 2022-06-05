@@ -1,0 +1,11 @@
+blessed==1.19.1
+future==0.18.2
+iso8601==0.1.16
+pkg-resources==0.0.0
+protobuf==3.19.4
+pyserial==3.5
+PyYAML==5.3.1
+pyzmq==20.0.0
+six==1.16.0
+wcwidth==0.2.5
+zmq==0.0.0

@@ -2,49 +2,97 @@
 
 ### Table of Contents
 
-1. [OpenLST User's Guide](#openlst-users-guide)
-   * [Table of Contents](#table-of-contents)
-1. [Introduction](#introduction)
-   * [Project Goals](#project-goals)
-   * [Project History](#project-history)
-   * [Contents and Features](#contents-and-features)
-   * [Non-Features](#non-features)
-   * [Customizability](#customizability)
-1. [Getting Started](#getting-started)
-   * [What You'll Need](#what-youll-need)
-   * [System Requirements and Setup](#system-requirements-and-setup)
-   * [Using Vagrant/VirtualBox](#using-vagrantvirtualbox)
-   * [Other Setup Options](#other-setup-options)
-1. [Connecting to the Demo Board](#connecting-to-the-demo-board)
-   * [Cleaning the Build Environment (Optional)](#cleaning-the-build-environment-optional)
-1. [Building and Loading the Bootloader](#building-and-loading-the-bootloader)
-1. [Building and Loading the Application](#building-and-loading-the-application)
-1. [Basic Local Commands](#basic-local-commands)
-   * [Packet Structure](#packet-structure)
-   * [Commands](#commands)
-1. [Creating a Custom Firmware Project](#creating-a-custom-firmware-project)
-   * [Repository Setup and Layout](#repository-setup-and-layout)
-   * [Common Customizations](#common-customizations)
-   * [Bootloader Features](#bootloader-features)
-   * [Application Features](#application-features)
-   * [Adding a Custom Command](#adding-a-custom-command)
-1. [Creating a Custom Hardware Project](#creating-a-custom-hardware-project)
-   * [Frequency Coverage](#frequency-coverage)
-   * [Design Files](#design-files)
-   * [Fabrication and Prototyping](#fabrication-and-prototyping)
-   * [Specifications](#specifications)
-1. [Frequency Selection](#frequency-selection)
-   * [Amateur Radio Frequencies](#amateur-radio-frequencies)
-   * [Commercial Frequencies](#commercial-frequencies)
-   * [Hardware changes](#hardware-changes)
-1. [Troubleshooting](#troubleshooting)
-   * [General Linux Resources](#general-linux-resources)
-   * [ZMQ](#zmq)
-   * [Systemd / Upstart / initd](#systemd-upstart-initd)
-   * [Udev Rules](#udev-rules)
-1. [Acknowledgements](#acknowledgements)
-1. [License Info](#license-info)
-1. [Disclaimers](#disclaimers)
+- [OpenLST User's Guide](#openlst-users-guide)
+    - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+    - [Project Goals](#project-goals)
+    - [Project History](#project-history)
+    - [Contents and Features](#contents-and-features)
+    - [Non-Features](#non-features)
+    - [Customizability](#customizability)
+      - [A note about Bash code blocks](#a-note-about-bash-code-blocks)
+  - [Getting Started](#getting-started)
+    - [What You'll Need](#what-youll-need)
+      - [Licensing Requirements for Sample Hardware](#licensing-requirements-for-sample-hardware)
+      - [Evaluation Board](#evaluation-board)
+      - [Programming Hardware and Recommended Tools](#programming-hardware-and-recommended-tools)
+      - [Power Supply](#power-supply)
+      - [Cloning and Building the Repository](#cloning-and-building-the-repository)
+    - [System Requirements and Setup](#system-requirements-and-setup)
+    - [Using Vagrant/VirtualBox](#using-vagrantvirtualbox)
+      - [To set up the VM:](#to-set-up-the-vm)
+    - [Other Setup Options](#other-setup-options)
+      - [cctool](#cctool)
+      - [SDCC](#sdcc)
+  - [Connecting to the Demo Board](#connecting-to-the-demo-board)
+    - [Cleaning the Build Environment (Optional)](#cleaning-the-build-environment-optional)
+  - [Building and Loading the Bootloader](#building-and-loading-the-bootloader)
+  - [Building and Loading the Application](#building-and-loading-the-application)
+  - [Basic Local Commands](#basic-local-commands)
+    - [Packet Structure](#packet-structure)
+      - [HWID](#hwid)
+      - [SEQNUM](#seqnum)
+      - [Destination](#destination)
+      - [Payload](#payload)
+    - [Commands](#commands)
+      - [`ACK`](#ack)
+      - [`NACK`](#nack)
+      - [`REBOOT [DELAY]`](#reboot-delay)
+      - [`GET_TELEM`](#get_telem)
+      - [`TELEM`](#telem)
+      - [`GET_TIME`](#get_time)
+      - [`SET_TIME SECONDS NANOSECONDS`](#set_time-seconds-nanoseconds)
+      - [`SET_CALLSIGN CALLSIGN`](#set_callsign-callsign)
+      - [`GET_CALLSIGN`](#get_callsign)
+      - [`CALLSIGN`](#callsign)
+      - [`ASCII STRING`](#ascii-string)
+      - [`BOOTLOADER_PING`](#bootloader_ping)
+      - [`BOOTLOADER_ERASE`](#bootloader_erase)
+      - [`BOOTLOADER_WRITE_PAGE`](#bootloader_write_page)
+      - [`BOOTLOADER_ACK`](#bootloader_ack)
+      - [`BOOTLOADER_NACK`](#bootloader_nack)
+  - [Creating a Custom Firmware Project](#creating-a-custom-firmware-project)
+    - [A note about the CC1110](#a-note-about-the-cc1110)
+    - [Repository Setup and Layout](#repository-setup-and-layout)
+    - [Common Customizations](#common-customizations)
+      - [Crystal Oscillator](#crystal-oscillator)
+      - [Radio Message Type](#radio-message-type)
+      - [Transceiver vs Rx or Tx Only](#transceiver-vs-rx-or-tx-only)
+      - [UARTs](#uarts)
+      - [Baud Rates](#baud-rates)
+      - [Flow Control](#flow-control)
+      - [General UART Configuration](#general-uart-configuration)
+      - [Default Radio Modes](#default-radio-modes)
+      - [Ranging Options](#ranging-options)
+      - [Reboots](#reboots)
+      - [Message Forwarding](#message-forwarding)
+      - [Optimizations](#optimizations)
+      - [Analog to Digital Conversion](#analog-to-digital-conversion)
+      - [Watchdog Reset](#watchdog-reset)
+      - [Simple RF Customization](#simple-rf-customization)
+      - [Advanced RF Customization](#advanced-rf-customization)
+    - [Bootloader Features](#bootloader-features)
+    - [Application Features](#application-features)
+    - [Adding a Custom Command](#adding-a-custom-command)
+  - [Creating a Custom Hardware Project](#creating-a-custom-hardware-project)
+    - [Frequency Coverage](#frequency-coverage)
+    - [Design Files](#design-files)
+    - [Fabrication and Prototyping](#fabrication-and-prototyping)
+    - [Specifications](#specifications)
+  - [Frequency Selection](#frequency-selection)
+    - [Amateur Radio Frequencies](#amateur-radio-frequencies)
+    - [Commercial Frequencies](#commercial-frequencies)
+    - [Hardware changes](#hardware-changes)
+  - [Troubleshooting](#troubleshooting)
+    - [General Linux Resources](#general-linux-resources)
+      - [Man pages and help](#man-pages-and-help)
+    - [ZMQ](#zmq)
+      - [Manually invoking `radio_mux.py`](#manually-invoking-radio_muxpy)
+    - [Systemd / Upstart / initd](#systemd--upstart--initd)
+    - [Udev Rules](#udev-rules)
+  - [Acknowledgements](#acknowledgements)
+  - [License Info](#license-info)
+  - [Disclaimers](#disclaimers)
 
 ## Introduction
 
@@ -206,8 +254,8 @@ includes:
 
 1. cctool (TI CC Debugger support software for programming)
 2. SDCC (the compiler toolchain)
-3. The included python tools for programming, signing, and testing the
-   application
+3. The included python tools for programming, signing, and testing the application
+   * For python3 support for these scripts outside of the vagrant box, see the [README here](tools/README)
 4. USB passthrough support for the TI CC Debugger and evaluation board serial
    ports
 5. A shared folder with the host machine so you can use development tools on
@@ -221,6 +269,13 @@ includes:
    * For macOS, follow the instructions on the link above
    * For Ubuntu Linux, this [linked guide may be useful](
     https://askubuntu.com/questions/41478/how-do-i-install-the-virtualbox-version-from-oracle-to-install-an-extension-pack/)
+   * You may have to run the following (seen on Ubuntu 16.04) to allow Virtualbox to access the USB drivers, run
+   ```
+   # sudo adduser $USER vboxusers
+   # #Log out, log back in, the following should list USB drivers
+   # VBoxManage list usbhost 
+   ```
+
 2. Install [Vagrant](https://www.vagrantup.com/). Version 2.0 or later is
    required.
 3. If you have not cloned the example project yet, clone the repository (see
@@ -357,7 +412,7 @@ vagrant@ubuntu-xenial:~/project$ cc-tool
 ```
 
 Load the flash image using the `flash_bootloader` Python utility. This script
-is included in the `openlst_tools` Python library in the repository. It is
+is included in the `openlst_tools` Python library in the repository (For python3 support for these scripts outside of the vagrant box, see the [README here](tools/README)) it is
 installed as part of the vagrant up provisioning step if you are using the
 Vagrant VM (if you're not using the Vagrant VM, you will need to install the
 python package under `tools/openlst_tools` locally with
@@ -699,6 +754,12 @@ The example project is a good learning resource and a great way to get started.
 However, any serious application is going to require frequency selection as
 well as some custom commands and board settings. The recommended approach is to
 fork the OpenLST repository and make your changes.
+
+### A note about the CC1110
+
+Any variant of the CC1110 __could__ be used for this project. __However__, the compiler & linker assume that the __CC1110F32__ variant is used. This is due to memory constraints. See page [45 of the CC1110 datasheet](https://www.ti.com/lit/ds/symlink/cc1110-cc1111.pdf). The F32 variant has only 0xEFF bytes of slow access/ program memory. Much of this space is used by the OpenLST firmware!
+
+The CC1110F32 does have 32 KB of flash, which this program does not fully utilize. It could be possible to fit the OpenLST firmware onto a F16 or F8 variant, if the memory issues are addressed.  
 
 ### Repository Setup and Layout
 
@@ -1250,6 +1311,8 @@ Even more ubiquitous are help queries, usually accessed by `-h` or `--help`.
 Many of the python helper scripts included with OpenLST will include help text,
 for example:
 
+(For python3 support for these scripts outside of the vagrant box, see the [README here](tools/README)
+
 ```bash
 $ radio_terminal --help
 usage: radio_terminal [-h] [-u {0,1}] [--rx-socket RX_SOCKET]
@@ -1283,6 +1346,20 @@ project uses the PUB/SUB and PUSH/PULL models.
 ZMQ will have issues if the proper sockets don't exist. Check for the presence
 of the sockets described in `radio_mux.py`. If these files don't exist, there's
 most likely an issue with either the device or the `radio_mux`.
+
+#### Manually invoking `radio_mux.py`
+
+For example, run `radio_mux` with debug logging. You'll want to run this in its own terminal window, or remove the `-v` option and run in the background.
+
+```bash
+$ radio_mux /dev/ttyUSB0 -v --tx-socket ipc:///tmp/radiomux1_tx --rx-socket ipc:///tmp/radiomux1_rx --echo-socket ipc:///tmp/radiomux1_echo 
+```
+
+And then use the corresponding `radio_terminal` command:
+
+```bash
+$ radio_terminal -u 1
+```
 
 ### Systemd / Upstart / initd
 

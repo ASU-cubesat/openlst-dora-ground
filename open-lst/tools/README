@@ -1,0 +1,13 @@
+# How to use these tools
+
+These tools were initially setup to be installed into the vagrant box that is used to compile the radio.
+However, I needed python3 to support parsing protobufs. Getting this working on the vagrant box was dependency hell. I now run the radio tools outside of the vagrant box, and only use the vagrant box for compiling the radio binaries.
+
+So, you'll need a python3 venv.
+
+* `python3 -m venv openlst_tools3_env` to create the env.
+* `source openlst_tools3_env/bin/activate`
+* `pip install -r requirements.txt`   Hopefully this just works. I know there was some issues with the protobuf things.
+* `python -m openlst_tools3.terminal --hwid 0001` or any other command.
+
+Not everything will work. I did not test if everything worked with python3 yet, but the core terminal works. There is also the fact that I wrote this to support python3.5, because of another dependency hell on my ubuntu 16.04 computer.

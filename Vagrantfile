@@ -26,9 +26,10 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--usbehci", "on"]
     vb.customize ["usbfilter", "add", "0", 
       "--target", :id,
-      "--name", "CC Debugger",
-      "--manufacturer", "Texas Instruments",
-      "--product", "CC Debugger"]
+      "--vendorid", "0451",
+      "--name", "CC Debugger"]
+#      "--manufacturer", "Texas Instruments",
+#      "--product", "CC Debugger"]
     vb.customize ["usbfilter", "add", "0",
       "--target", :id,
       "--name", "TTL232R-3V3",
