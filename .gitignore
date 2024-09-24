@@ -6,3 +6,6 @@
 *.log
 *.sig
 *.keys
+
+openlst_tools3_env/
+*vbox*.gpg

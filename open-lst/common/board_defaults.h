@@ -201,10 +201,12 @@
 #define RF_FREQ2 0x10
 #endif
 #ifndef RF_FREQ1
-#define RF_FREQ1 0x2F
+//#define RF_FREQ1 0x2F
+#define RF_FREQ1 0x7B
 #endif
 #ifndef RF_FREQ0
-#define RF_FREQ0 0x69
+//#define RF_FREQ0 0x69
+#define RF_FREQ0 0x42
 #endif
 // The defaults here are the CC1110 hard defaults
 #ifndef RF_SYNC_WORD1
@@ -308,3 +310,11 @@ void board_defaults_init(void);
 uint8_t board_apply_radio_settings(uint8_t mode);
 
 #endif
+
+// For updating freq dyncamically through commands
+typedef struct FreqSettings {
+  uint8_t freq2;
+  uint8_t freq1;
+  uint8_t freq0;
+} frequency_settings_t;
+extern frequency_settings_t frequency_settings;

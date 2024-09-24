@@ -23,6 +23,12 @@
 #include "cc1110_regs.h"
 #include "board_defaults.h"
 
+frequency_settings_t frequency_settings = {
+  RF_FREQ2,
+  RF_FREQ1,
+  RF_FREQ0
+};
+
 // TODO: are there GPIOs that need to be initialized on boot?
 // TODO: frequency overrides so we don't have to copy paste this whole thing
 
@@ -179,9 +185,10 @@ uint8_t board_apply_radio_settings(uint8_t mode) {
 		case amateur_rf_mode_437_7k_FEC:
 			FSCTRL1 =   RF_FSCTRL1;
 			FSCTRL0 =   RF_FSCTRL0;
-			FREQ2 =     RF_FREQ2;
-			FREQ1 =     RF_FREQ1;
-			FREQ0 =     RF_FREQ0;
+			// Update dynamically based on commands
+			FREQ2 = frequency_settings.freq2;
+			FREQ1 = frequency_settings.freq1;
+			FREQ0 = frequency_settings.freq0;
 		break;
 		#ifndef BOOTLOADER
 		case amateur_rf_mode_437_10k_ranging:

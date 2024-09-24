@@ -24,15 +24,20 @@ Vagrant.configure("2") do |config|
     vb.memory = 2048  # building cctool requires 2GB of RAM
     vb.customize ["modifyvm", :id, "--usb", "on"]
     vb.customize ["modifyvm", :id, "--usbehci", "on"]
-    vb.customize ["usbfilter", "add", "0", 
-      "--target", :id,
-      "--vendorid", "0451",
-      "--name", "CC Debugger"]
+    #vb.customize ["usbfilter", "add", "0", 
+    #  "--target", :id,
+    #  "--vendorid", "0451",
+    #  "--name", "CC Debugger"]
 #      "--manufacturer", "Texas Instruments",
 #      "--product", "CC Debugger"]
+    #vb.customize ["usbfilter", "add", "0",
+    #  "--target", :id,
+    #  "--name", "TTL232R-3V3",
+    #  "--manufacturer", "FTDI",
+    #  "--product", "TTL232R-3V3"]
     vb.customize ["usbfilter", "add", "0",
       "--target", :id,
-      "--name", "TTL232R-3V3",
+      "--name", "FTDI TTL232R-3V3 [0600]",
       "--manufacturer", "FTDI",
       "--product", "TTL232R-3V3"]
   end
