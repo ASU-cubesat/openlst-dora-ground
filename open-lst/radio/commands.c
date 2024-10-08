@@ -53,9 +53,13 @@ uint8_t custom_commands(const __xdata command_t *cmd, uint8_t len, __xdata comma
 		case radio_set_frequency:
 			reply->header.command = common_msg_ack;
 
-			frequency_settings.freq2 = cmd->data[0];
-			frequency_settings.freq1 = cmd->data[1];
-			frequency_settings.freq0 = cmd->data[2];
+			frequency_settings.rx_freq2 = cmd->data[0];
+			frequency_settings.rx_freq1 = cmd->data[1];
+			frequency_settings.rx_freq0 = cmd->data[2];
+
+			frequency_settings.tx_freq2 = cmd->data[3];
+			frequency_settings.tx_freq1 = cmd->data[4];
+			frequency_settings.tx_freq0 = cmd->data[5];
 
 			// Update a global instead and use that in the board_apply_radio_settings() function or after its called in the listen to radio and transmit functions
 

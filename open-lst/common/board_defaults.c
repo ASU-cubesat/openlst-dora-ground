@@ -24,6 +24,12 @@
 #include "board_defaults.h"
 
 frequency_settings_t frequency_settings = {
+  // RX
+  RF_FREQ2,
+  RF_FREQ1,
+  RF_FREQ0,
+
+  // TX
   RF_FREQ2,
   RF_FREQ1,
   RF_FREQ0
@@ -35,7 +41,8 @@ frequency_settings_t frequency_settings = {
 #ifndef BOARD_RF_SETTINGS
 
 
-uint8_t board_apply_radio_settings(uint8_t mode) {
+// Receiving is false for transmitting
+uint8_t board_apply_radio_settings(uint8_t mode, uint8_t receiving) {
 	// The default settings are for 437Mhz 7kbps with FEC
 	// These were derived from RF Studio using the following inputs:
 	// Base Frequency: 437.000305 Mhz
@@ -186,9 +193,15 @@ uint8_t board_apply_radio_settings(uint8_t mode) {
 			FSCTRL1 =   RF_FSCTRL1;
 			FSCTRL0 =   RF_FSCTRL0;
 			// Update dynamically based on commands
-			FREQ2 = frequency_settings.freq2;
-			FREQ1 = frequency_settings.freq1;
-			FREQ0 = frequency_settings.freq0;
+			if (receiving) {
+				FREQ2 = frequency_settings.rx_freq2;
+				FREQ1 = frequency_settings.rx_freq1;
+				FREQ0 = frequency_settings.rx_freq0;
+			} else {
+				FREQ2 = frequency_settings.tx_freq2;
+				FREQ1 = frequency_settings.tx_freq1;
+				FREQ0 = frequency_settings.tx_freq0;
+			}
 		break;
 		#ifndef BOOTLOADER
 		case amateur_rf_mode_437_10k_ranging:

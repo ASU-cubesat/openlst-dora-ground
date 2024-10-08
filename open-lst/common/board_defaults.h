@@ -122,7 +122,7 @@
 // by default every 10 minutes
 // Override this to 0 to disable the auto reboot
 #ifndef AUTO_REBOOT_SECONDS
-#define AUTO_REBOOT_SECONDS 600
+#define AUTO_REBOOT_SECONDS 0
 #endif
 
 // Cap the number of seconds the reboot counter
@@ -201,12 +201,12 @@
 #define RF_FREQ2 0x10
 #endif
 #ifndef RF_FREQ1
-//#define RF_FREQ1 0x2F
-#define RF_FREQ1 0x7B
+#define RF_FREQ1 0x2F
+//#define RF_FREQ1 0x7B
 #endif
 #ifndef RF_FREQ0
-//#define RF_FREQ0 0x69
-#define RF_FREQ0 0x42
+#define RF_FREQ0 0x69
+//#define RF_FREQ0 0x42
 #endif
 // The defaults here are the CC1110 hard defaults
 #ifndef RF_SYNC_WORD1
@@ -307,14 +307,19 @@ typedef enum {
 #endif
 
 void board_defaults_init(void);
-uint8_t board_apply_radio_settings(uint8_t mode);
+// Receiving 0 for transmitting, 1 for receiving
+uint8_t board_apply_radio_settings(uint8_t mode, uint8_t receiving);
 
 #endif
 
 // For updating freq dyncamically through commands
 typedef struct FreqSettings {
-  uint8_t freq2;
-  uint8_t freq1;
-  uint8_t freq0;
+  uint8_t rx_freq2;
+  uint8_t rx_freq1;
+  uint8_t rx_freq0;
+
+  uint8_t tx_freq2;
+  uint8_t tx_freq1;
+  uint8_t tx_freq0;
 } frequency_settings_t;
 extern frequency_settings_t frequency_settings;

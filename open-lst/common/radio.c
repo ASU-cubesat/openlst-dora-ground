@@ -284,7 +284,7 @@ void radio_listen(void) {
 	board_pre_rx();
 	#endif
 
-	board_apply_radio_settings(radio_mode_rx);
+	board_apply_radio_settings(radio_mode_rx, 1);
 
 	// Abort any ongoing DMA transaction (RX or TX) on our channel
 	dma_abort(dma_channel_rf);
@@ -354,7 +354,14 @@ void radio_send_packet(const __xdata command_t* cmd, uint8_t len,
 	IEN2 &= ~IEN2_RFIE;
 	RFST = RFST_SIDLE;
 
-	board_apply_radio_settings(radio_mode_tx);
+	board_apply_radio_settings(radio_mode_tx, 0);
+
+	int i = 0;
+	while (i < 27000)
+	{
+		asm("nop");
+		i++;
+	}
 
 	// Abort any ongoing DMA transaction (RX or TX) on our channel
 	dma_abort(dma_channel_rf);
